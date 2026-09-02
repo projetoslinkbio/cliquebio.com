@@ -5,15 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Clique Bio</title>
 <style>
+  @property --angle{
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+
   :root{
-    --bg: #0a0a12;
-    --bg-2: #0d0e1a;
-    --violet: #8b5cf6;
-    --cyan: #22d3ee;
-    --text: #f2f2f7;
-    --text-dim: #9797a8;
+    --bg: #0a0a0b;
+    --metal-1: #16161a;
+    --metal-2: #232326;
+    --yellow: #e8ff3d;
+    --amber: #ffb545;
+    --text: #f4f4ec;
+    --text-dim: #8c8c85;
     --glass: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.1);
   }
 
   *{ box-sizing: border-box; margin:0; padding:0; }
@@ -22,62 +29,82 @@
     * { animation: none !important; transition: none !important; }
   }
 
-  html, body{
-    height:100%;
-    background: var(--bg);
-    overscroll-behavior: none;
-  }
+  html, body{ height:100%; }
 
   body{
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text);
+    background: var(--bg);
     min-height: 100dvh;
     display:flex;
-    justify-content:center;
+    flex-direction: column;
+    align-items: stretch;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* fundo com efeito de glow orbitando devagar */
-  .glow{
+  /* ===== atmosfera líquido-metálica ===== */
+  .liquid{
     position: fixed;
     inset: 0;
     z-index: 0;
     overflow: hidden;
-    background: var(--bg);
-  }
-  .glow::before, .glow::after{
-    content:"";
-    position:absolute;
-    width: 70vmax;
-    height: 70vmax;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.35;
-    animation: drift 22s ease-in-out infinite alternate;
-  }
-  .glow::before{
-    background: radial-gradient(circle, var(--violet), transparent 60%);
-    top: -25vmax;
-    left: -20vmax;
-  }
-  .glow::after{
-    background: radial-gradient(circle, var(--cyan), transparent 60%);
-    bottom: -25vmax;
-    right: -20vmax;
-    animation-delay: -11s;
-  }
-  @keyframes drift{
-    from{ transform: translate(0,0) scale(1); }
-    to{ transform: translate(6vmax, 4vmax) scale(1.08); }
+    background:
+      radial-gradient(120% 90% at 15% -10%, #2a2a1c 0%, transparent 45%),
+      radial-gradient(90% 70% at 100% 10%, #1c1e22 0%, transparent 50%),
+      linear-gradient(160deg, var(--metal-1) 0%, #0d0d0e 55%, #08080a 100%);
   }
 
-  .noise{
+  .blob{
+    position: absolute;
+    filter: blur(60px);
+    mix-blend-mode: screen;
+    animation: morph 14s ease-in-out infinite;
+  }
+  .blob-1{
+    width: 62vmax; height: 62vmax;
+    top: -24vmax; left: -22vmax;
+    background: radial-gradient(circle, rgba(232,255,61,0.20), transparent 68%);
+    border-radius: 58% 42% 35% 65% / 55% 38% 62% 45%;
+  }
+  .blob-2{
+    width: 44vmax; height: 44vmax;
+    bottom: -18vmax; right: -16vmax;
+    background: radial-gradient(circle, rgba(255,181,69,0.14), transparent 65%);
+    border-radius: 40% 60% 62% 38% / 48% 52% 48% 52%;
+    animation-delay: -6s;
+    animation-duration: 17s;
+  }
+  @keyframes morph{
+    0%, 100%{ border-radius: 58% 42% 35% 65% / 55% 38% 62% 45%; transform: translate(0,0) scale(1); }
+    50%{ border-radius: 42% 58% 60% 40% / 45% 58% 42% 55%; transform: translate(2.5vmax, 3vmax) scale(1.06); }
+  }
+
+  /* reflexo diagonal deslizando, como brilho em metal líquido */
+  .sheen{
+    position: absolute;
+    inset: -50% -20%;
+    background: linear-gradient(75deg,
+      transparent 40%,
+      rgba(232,255,61,0.05) 47%,
+      rgba(255,255,255,0.09) 50%,
+      rgba(232,255,61,0.05) 53%,
+      transparent 60%);
+    animation: sheenMove 9s ease-in-out infinite;
+  }
+  @keyframes sheenMove{
+    0%{ transform: translateX(-25%); }
+    50%{ transform: translateX(15%); }
+    100%{ transform: translateX(-25%); }
+  }
+
+  .grain{
     position: fixed;
-    inset:0;
-    z-index:1;
-    pointer-events:none;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+    inset: 0;
+    z-index: 1;
+    opacity: 0.5;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
     background-size: 3px 3px;
   }
 
@@ -86,152 +113,228 @@
     z-index: 2;
     width: 100%;
     max-width: 440px;
-    padding: 48px 24px 32px;
+    margin: 0 auto;
+    padding: 40px 26px 24px;
     display:flex;
     flex-direction:column;
-    align-items:center;
-    text-align:center;
+    flex: 1;
   }
 
-  .mark{
-    width: 72px;
-    height: 72px;
-    border-radius: 22px;
+  .status{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 7px 14px 7px 10px;
+    border-radius: 100px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-bottom: 34px;
+  }
+  .dot{
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--yellow);
+    animation: ping 2s ease-out infinite;
+  }
+  @keyframes ping{
+    0%{ box-shadow: 0 0 0 0 rgba(232,255,61,0.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(232,255,61,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(232,255,61,0); }
+  }
+
+  .identity{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .avatar-wrap{
+    position: relative;
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+  }
+  .avatar-ring{
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: conic-gradient(from var(--angle), var(--yellow), transparent 30%, transparent 70%, var(--yellow));
+    animation: spin 5s linear infinite;
+  }
+  @keyframes spin{ to{ --angle: 360deg; } }
+  .avatar{
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--metal-2);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
+  }
+  .avatar span{
+    font-family: 'Sora', 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 26px;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--violet), var(--cyan));
-    color: #08080d;
-    box-shadow: 0 0 40px -8px rgba(139,92,246,0.55);
-    margin-bottom: 20px;
+    font-size: 16px;
+    color: var(--yellow);
+    text-shadow: 0 0 16px rgba(232,255,61,0.55);
   }
 
+  .identity-text{ text-align: left; }
   .name{
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-family: 'Sora', 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 19px;
-    letter-spacing: -0.01em;
+    font-size: 16.5px;
   }
-
   .role{
     color: var(--text-dim);
-    font-size: 14px;
-    margin-top: 4px;
-    margin-bottom: 36px;
+    font-size: 13px;
+    margin-top: 2px;
   }
 
   h1{
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-family: 'Sora', 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 30px;
-    line-height: 1.22;
+    font-size: 32px;
+    line-height: 1.2;
     letter-spacing: -0.015em;
-    max-width: 21ch;
+    text-align: left;
+    max-width: 15ch;
+
+    background: linear-gradient(100deg, var(--text) 30%, var(--yellow) 48%, var(--amber) 55%, var(--text) 70%);
+    background-size: 260% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 22px rgba(232,255,61,0.18));
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer{
+    to{ background-position: -260% 0; }
   }
 
   .sub{
     color: var(--text-dim);
     font-size: 15.5px;
-    line-height: 1.55;
-    max-width: 34ch;
-    margin-top: 16px;
-    margin-bottom: 34px;
+    line-height: 1.6;
+    text-align: left;
+    max-width: 32ch;
+    margin-top: 18px;
+  }
+
+  .spacer{ flex: 1; min-height: 32px; }
+
+  .cta-wrap{
+    position: relative;
+    border-radius: 18px;
+    padding: 2px;
+    background: conic-gradient(from var(--angle), var(--yellow), rgba(232,255,61,0.15) 35%, var(--amber) 55%, rgba(232,255,61,0.15) 75%, var(--yellow));
+    animation: spin 4s linear infinite;
+    box-shadow: 0 18px 46px -14px rgba(232,255,61,0.35);
   }
 
   .cta{
-    width: 100%;
     display:flex;
     align-items:center;
     justify-content:center;
     gap: 10px;
+    width: 100%;
     padding: 17px 20px;
     border-radius: 16px;
-    background: linear-gradient(135deg, var(--violet), var(--cyan));
-    color: #08080d;
+    background: #0d0d0e;
+    color: var(--yellow);
     font-weight: 600;
-    font-size: 16.5px;
+    font-size: 16px;
     text-decoration:none;
-    box-shadow: 0 8px 30px -6px rgba(34,211,238,0.35), 0 0 0 1px rgba(255,255,255,0.06) inset;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.15s ease, color 0.15s ease;
   }
-  .cta:active{
-    transform: scale(0.97);
-  }
+  .cta:active{ transform: scale(0.97); }
   .cta:focus-visible{
-    outline: 2px solid var(--cyan);
+    outline: 2px solid var(--yellow);
     outline-offset: 3px;
   }
-
-  .cta svg{ width: 20px; height: 20px; flex-shrink:0; }
+  .cta svg{ width: 19px; height: 19px; flex-shrink:0; }
 
   .links{
-    margin-top: 14px;
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    gap: 10px;
+    margin-top: 12px;
   }
-
   .link-sec{
+    display:block;
     width:100%;
-    padding: 14px 20px;
-    border-radius: 14px;
+    padding: 13px 18px;
+    border-radius: 12px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     color: var(--text);
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 500;
     text-decoration:none;
+    text-align: left;
     transition: background 0.15s ease, border-color 0.15s ease;
   }
   .link-sec:hover{
-    background: rgba(255,255,255,0.07);
-    border-color: rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.075);
+    border-color: rgba(255,255,255,0.18);
   }
   .link-sec:focus-visible{
-    outline: 2px solid var(--cyan);
+    outline: 2px solid var(--yellow);
     outline-offset: 2px;
   }
 
   footer{
     position: relative;
     z-index: 2;
-    margin-top: auto;
-    padding: 24px 0 20px;
-    font-size: 12.5px;
-    color: rgba(151,151,168,0.6);
+    padding: 22px 26px 22px;
+    max-width: 440px;
+    margin: 0 auto;
+    width: 100%;
+    text-align: left;
+    font-size: 12px;
+    color: rgba(140,140,133,0.7);
   }
-
-  footer span{
-    color: var(--text-dim);
-    font-weight: 500;
-  }
+  footer span{ color: var(--text-dim); font-weight: 500; }
 </style>
 </head>
 <body>
 
-  <div class="glow"></div>
-  <div class="noise"></div>
+  <div class="liquid">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="sheen"></div>
+  </div>
+  <div class="grain"></div>
 
   <main>
-    <div class="mark">CB</div>
-    <div class="name">Clique Bio</div>
-    <div class="role">Páginas de link na bio sob medida</div>
+    <div class="status"><span class="dot"></span>Aceitando novos projetos</div>
+
+    <div class="identity">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar"><span>CB</span></div>
+      </div>
+      <div class="identity-text">
+        <div class="name">Clique Bio</div>
+        <div class="role">Seu link na bio, 100% com a cara do seu negócio</div>
+      </div>
+    </div>
 
     <h1>Sua bio ainda não vende por você</h1>
-    <p class="sub">Transformamos o link do seu Instagram numa página feita pra converter curioso em cliente — pronta em poucos dias, com a cara do seu negócio.</p>
+    <p class="sub">Transformamos o link do seu Instagram numa página que converte curioso em cliente — entregue em até 2 horas, por apenas R$ 9,90, com suporte eterno.</p>
 
-    <a class="cta" href="https://wa.me/5500000000000?text=Oi!%20Quero%20saber%20mais%20sobre%20a%20Clique%20Bio" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.01 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.43 1.27 4.87L2 22l5.28-1.38A9.94 9.94 0 0 0 12.01 22c5.52 0 10-4.48 10-10s-4.48-10-10-10zm5.84 14.24c-.25.7-1.45 1.35-2 1.44-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.25-5.04-4.45-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.6-.37.8-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.25.6.85 2.07.92 2.22.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.13.08.72-.17 1.42z"/></svg>
-      Falar no WhatsApp agora
-    </a>
+    <div class="spacer"></div>
 
-    <div class="links">
-      <a class="link-sec" href="https://instagram.com/" target="_blank" rel="noopener">Ver portfólio no Instagram</a>
+    <div class="cta-wrap">
+      <a class="cta" href="https://wa.me/5500000000000?text=Oi!%20Quero%20saber%20mais%20sobre%20a%20Clique%20Bio" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.01 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.43 1.27 4.87L2 22l5.28-1.38A9.94 9.94 0 0 0 12.01 22c5.52 0 10-4.48 10-10s-4.48-10-10-10zm5.84 14.24c-.25.7-1.45 1.35-2 1.44-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.25-5.04-4.45-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.6-.37.8-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.25.6.85 2.07.92 2.22.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.13.08.72-.17 1.42z"/></svg>
+        Falar no WhatsApp agora
+      </a>
     </div>
   </main>
 
