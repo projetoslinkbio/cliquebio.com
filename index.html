@@ -12,15 +12,15 @@
   }
 
   :root{
-    --bg: #0a0a0b;
-    --metal-1: #16161a;
-    --metal-2: #232326;
+    --bg: #0d0a05;
+    --metal-1: #1c160a;
+    --metal-2: #262018;
     --yellow: #e8ff3d;
     --amber: #ffb545;
     --text: #f4f4ec;
-    --text-dim: #8c8c85;
-    --glass: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.1);
+    --text-dim: #9c9488;
+    --glass: rgba(255,255,255,0.045);
+    --glass-border: rgba(232,255,61,0.14);
   }
 
   *{ box-sizing: border-box; margin:0; padding:0; }
@@ -50,27 +50,26 @@
     z-index: 0;
     overflow: hidden;
     background:
-      radial-gradient(120% 90% at 15% -10%, #2a2a1c 0%, transparent 45%),
-      radial-gradient(90% 70% at 100% 10%, #1c1e22 0%, transparent 50%),
-      linear-gradient(160deg, var(--metal-1) 0%, #0d0d0e 55%, #08080a 100%);
+      radial-gradient(120% 90% at 15% -10%, #4a4118 0%, transparent 48%),
+      radial-gradient(90% 70% at 100% 15%, #3a2a10 0%, transparent 52%),
+      linear-gradient(160deg, var(--metal-1) 0%, #120e07 55%, #0a0805 100%);
   }
 
   .blob{
     position: absolute;
     filter: blur(60px);
-    mix-blend-mode: screen;
     animation: morph 14s ease-in-out infinite;
   }
   .blob-1{
     width: 62vmax; height: 62vmax;
     top: -24vmax; left: -22vmax;
-    background: radial-gradient(circle, rgba(232,255,61,0.20), transparent 68%);
+    background: radial-gradient(circle, rgba(232,255,61,0.42), transparent 68%);
     border-radius: 58% 42% 35% 65% / 55% 38% 62% 45%;
   }
   .blob-2{
     width: 44vmax; height: 44vmax;
     bottom: -18vmax; right: -16vmax;
-    background: radial-gradient(circle, rgba(255,181,69,0.14), transparent 65%);
+    background: radial-gradient(circle, rgba(255,181,69,0.34), transparent 65%);
     border-radius: 40% 60% 62% 38% / 48% 52% 48% 52%;
     animation-delay: -6s;
     animation-duration: 17s;
@@ -80,29 +79,27 @@
     50%{ border-radius: 42% 58% 60% 40% / 45% 58% 42% 55%; transform: translate(2.5vmax, 3vmax) scale(1.06); }
   }
 
-  /* reflexo diagonal deslizando, como brilho em metal líquido */
+  /* brilho quente localizado atrás do headline, em vez de feixe cinza cruzando a tela */
   .sheen{
     position: absolute;
-    inset: -50% -20%;
-    background: linear-gradient(75deg,
-      transparent 40%,
-      rgba(232,255,61,0.05) 47%,
-      rgba(255,255,255,0.09) 50%,
-      rgba(232,255,61,0.05) 53%,
-      transparent 60%);
+    top: 30%;
+    left: -10%;
+    width: 70vmax;
+    height: 40vmax;
+    background: radial-gradient(circle, rgba(255,197,74,0.16), transparent 70%);
+    filter: blur(50px);
     animation: sheenMove 9s ease-in-out infinite;
   }
   @keyframes sheenMove{
-    0%{ transform: translateX(-25%); }
-    50%{ transform: translateX(15%); }
-    100%{ transform: translateX(-25%); }
+    0%, 100%{ opacity: 0.7; transform: translateY(0); }
+    50%{ opacity: 1; transform: translateY(-2vmax); }
   }
 
   .grain{
     position: fixed;
     inset: 0;
     z-index: 1;
-    opacity: 0.5;
+    opacity: 0.35;
     pointer-events: none;
     background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
     background-size: 3px 3px;
@@ -117,6 +114,7 @@
     padding: 40px 26px 24px;
     display:flex;
     flex-direction:column;
+    justify-content: center;
     flex: 1;
   }
 
@@ -177,6 +175,12 @@
     align-items:center;
     justify-content:center;
   }
+  .avatar img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
   .avatar span{
     font-family: 'Sora', 'Inter', sans-serif;
     font-weight: 700;
@@ -227,7 +231,7 @@
     margin-top: 18px;
   }
 
-  .spacer{ flex: 1; min-height: 32px; }
+  .spacer{ min-height: 40px; }
 
   .cta-wrap{
     position: relative;
@@ -317,7 +321,7 @@
     <div class="identity">
       <div class="avatar-wrap">
         <div class="avatar-ring"></div>
-        <div class="avatar"><span>CB</span></div>
+        <div class="avatar"><img src="https://doram.shop/wp-content/uploads/2026/09/ChatGPT-Image-1-de-set.-de-2026-22_00_38.png" alt="Clique Bio"></div>
       </div>
       <div class="identity-text">
         <div class="name">Clique Bio</div>
