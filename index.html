@@ -44,6 +44,25 @@
   }
 
   /* ===== atmosfera líquido-metálica ===== */
+  .bg-image{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: url('https://doram.shop/wp-content/uploads/2026/09/ChatGPT-Image-1-de-set.-de-2026-22_42_01.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.28;
+  }
+
+  .overlay{
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background:
+      radial-gradient(120% 90% at 50% 40%, transparent 0%, rgba(6,4,3,0.55) 55%, rgba(6,4,3,0.93) 100%),
+      linear-gradient(180deg, rgba(6,4,3,0.35) 0%, rgba(6,4,3,0.55) 45%, rgba(6,4,3,0.8) 100%);
+  }
+
   .liquid{
     position: fixed;
     inset: 0;
@@ -53,8 +72,7 @@
       radial-gradient(60% 45% at 8% 5%, #5a3d10 0%, transparent 55%),
       radial-gradient(55% 42% at 95% 0%, #4a2e0c 0%, transparent 55%),
       radial-gradient(60% 45% at 0% 100%, #3d2808 0%, transparent 55%),
-      radial-gradient(55% 42% at 100% 100%, #4a3410 0%, transparent 55%),
-      linear-gradient(160deg, var(--metal-1) 0%, #100c05 55%, #060403 100%);
+      radial-gradient(55% 42% at 100% 100%, #4a3410 0%, transparent 55%);
   }
 
   .blob{
@@ -326,6 +344,7 @@
 </head>
 <body>
 
+  <div class="bg-image"></div>
   <div class="liquid">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -333,6 +352,7 @@
     <div class="blob blob-4"></div>
     <div class="sheen"></div>
   </div>
+  <div class="overlay"></div>
   <div class="grain"></div>
 
   <main>
