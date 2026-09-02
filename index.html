@@ -50,43 +50,61 @@
     z-index: 0;
     overflow: hidden;
     background:
-      radial-gradient(120% 90% at 15% -10%, #4a4118 0%, transparent 48%),
-      radial-gradient(90% 70% at 100% 15%, #3a2a10 0%, transparent 52%),
-      linear-gradient(160deg, var(--metal-1) 0%, #120e07 55%, #0a0805 100%);
+      radial-gradient(60% 45% at 8% 5%, #5a3d10 0%, transparent 55%),
+      radial-gradient(55% 42% at 95% 0%, #4a2e0c 0%, transparent 55%),
+      radial-gradient(60% 45% at 0% 100%, #3d2808 0%, transparent 55%),
+      radial-gradient(55% 42% at 100% 100%, #4a3410 0%, transparent 55%),
+      linear-gradient(160deg, var(--metal-1) 0%, #100c05 55%, #060403 100%);
   }
 
   .blob{
     position: absolute;
-    filter: blur(60px);
+    filter: blur(55px);
     animation: morph 14s ease-in-out infinite;
   }
   .blob-1{
-    width: 62vmax; height: 62vmax;
-    top: -24vmax; left: -22vmax;
-    background: radial-gradient(circle, rgba(232,255,61,0.42), transparent 68%);
+    width: 58vmax; height: 58vmax;
+    top: -26vmax; left: -24vmax;
+    background: radial-gradient(circle, rgba(255,207,77,0.5), rgba(232,255,61,0.2) 45%, transparent 70%);
     border-radius: 58% 42% 35% 65% / 55% 38% 62% 45%;
   }
   .blob-2{
-    width: 44vmax; height: 44vmax;
-    bottom: -18vmax; right: -16vmax;
-    background: radial-gradient(circle, rgba(255,181,69,0.34), transparent 65%);
+    width: 46vmax; height: 46vmax;
+    bottom: -20vmax; right: -18vmax;
+    background: radial-gradient(circle, rgba(255,157,46,0.42), rgba(255,181,69,0.18) 45%, transparent 68%);
     border-radius: 40% 60% 62% 38% / 48% 52% 48% 52%;
     animation-delay: -6s;
     animation-duration: 17s;
+  }
+  .blob-3{
+    width: 40vmax; height: 40vmax;
+    top: -16vmax; right: -18vmax;
+    background: radial-gradient(circle, rgba(255,181,69,0.3), transparent 65%);
+    border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%;
+    animation-delay: -3s;
+    animation-duration: 15s;
+  }
+  .blob-4{
+    width: 38vmax; height: 38vmax;
+    bottom: -18vmax; left: -16vmax;
+    background: radial-gradient(circle, rgba(255,207,77,0.26), transparent 65%);
+    border-radius: 45% 55% 55% 45% / 55% 45% 55% 45%;
+    animation-delay: -9s;
+    animation-duration: 16s;
   }
   @keyframes morph{
     0%, 100%{ border-radius: 58% 42% 35% 65% / 55% 38% 62% 45%; transform: translate(0,0) scale(1); }
     50%{ border-radius: 42% 58% 60% 40% / 45% 58% 42% 55%; transform: translate(2.5vmax, 3vmax) scale(1.06); }
   }
 
-  /* brilho quente localizado atrás do headline, em vez de feixe cinza cruzando a tela */
+  /* brilho quente localizado atrás do headline */
   .sheen{
     position: absolute;
     top: 30%;
     left: -10%;
     width: 70vmax;
     height: 40vmax;
-    background: radial-gradient(circle, rgba(255,197,74,0.16), transparent 70%);
+    background: radial-gradient(circle, rgba(255,197,74,0.14), transparent 70%);
     filter: blur(50px);
     animation: sheenMove 9s ease-in-out infinite;
   }
@@ -99,7 +117,7 @@
     position: fixed;
     inset: 0;
     z-index: 1;
-    opacity: 0.35;
+    opacity: 0.3;
     pointer-events: none;
     background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
     background-size: 3px 3px;
@@ -311,6 +329,8 @@
   <div class="liquid">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
     <div class="sheen"></div>
   </div>
   <div class="grain"></div>
